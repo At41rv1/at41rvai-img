@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon, Download } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/lib/firebase";
@@ -116,6 +116,36 @@ const ImageGenerator = () => {
     setModel(newModel);
   }
 
+  const handleDownload = async () => {
+    if (!imageUrl) return;
+
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const blob = await response.blob();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      const filename =
+        (
+          prompt
+            .substring(0, 30)
+            .replace(/[^a-z0-9]/gi, "_")
+            .toLowerCase() || "generated-image"
+        ) + ".png";
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+      toast.success("Image download started.");
+    } catch (error) {
+      console.error("Download failed", error);
+      toast.error("Failed to download image.");
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto grid gap-8 lg:grid-cols-2">
       <div className="space-y-6 relative">
@@ -168,7 +198,7 @@ const ImageGenerator = () => {
         </form>
       </div>
       
-      <div className="bg-card rounded-lg border p-4 flex items-center justify-center aspect-square">
+      <div className="bg-card rounded-lg border p-4 flex items-center justify-center aspect-square relative">
         {loading && <Skeleton className="h-full w-full rounded-md" />}
         {!loading && !imageUrl && (
           <div className="text-center text-muted-foreground">
@@ -177,11 +207,22 @@ const ImageGenerator = () => {
           </div>
         )}
         {imageUrl && !loading && (
-          <img
-            src={imageUrl}
-            alt={prompt}
-            className="rounded-md object-contain h-full w-full animate-image-pop-in"
-          />
+          <>
+            <img
+              src={imageUrl}
+              alt={prompt}
+              className="rounded-md object-contain h-full w-full animate-image-pop-in"
+            />
+            <Button
+              onClick={handleDownload}
+              variant="secondary"
+              size="icon"
+              className="absolute top-3 right-3 h-10 w-10 bg-black/50 hover:bg-black/75 text-white"
+            >
+              <Download className="h-5 w-5" />
+              <span className="sr-only">Download image</span>
+            </Button>
+          </>
         )}
       </div>
     </div>
