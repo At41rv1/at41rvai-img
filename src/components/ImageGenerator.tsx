@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
@@ -121,29 +120,40 @@ const ImageGenerator = () => {
     if (!imageUrl) return;
 
     try {
-      const response = await fetch(imageUrl);
+      const response = await fetch(
+        `/.netlify/functions/download-image?imageUrl=${encodeURIComponent(
+          imageUrl
+        )}`
+      );
+
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        let errorMsg = "Failed to download image.";
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) {
+          // Response might not be json
+        }
+        throw new Error(errorMsg);
       }
+
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       const filename =
-        (
-          prompt
-            .substring(0, 30)
-            .replace(/[^a-z0-9]/gi, "_")
-            .toLowerCase() || "generated-image"
-        ) + ".png";
+        (prompt
+          .substring(0, 30)
+          .replace(/[^a-z0-9]/gi, "_")
+          .toLowerCase() || "generated-image") + ".png";
       link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
       toast.success("Image download started.");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Download failed", error);
-      toast.error("Failed to download image.");
+      toast.error(error.message || "Failed to download image.");
     }
   };
 
