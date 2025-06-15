@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,8 +22,8 @@ const models = [
   { id: "TogetherImage/black-forest-labs/FLUX.1.1-pro", name: "At41rv Pro" },
 ];
 
-const API_URL = "VITE_API_URL";
-const API_KEY = "VITE_API_AI"; // Note: In production, API keys should be handled securely and not exposed on the client-side.
+const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_AI;
 
 const ImageGenerator = () => {
   const { user } = useAuth();
