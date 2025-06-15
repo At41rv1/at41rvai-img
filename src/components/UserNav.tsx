@@ -1,4 +1,3 @@
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +12,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
-import { LogOut, User as UserIcon, ShieldCheck } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function UserNav() {
@@ -61,14 +60,6 @@ export function UserNav() {
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
-          {userData?.role === 'admin' && (
-             <DropdownMenuItem asChild>
-                <Link to="/admin">
-                    <ShieldCheck className="mr-2 h-4 w-4" />
-                    <span>Admin</span>
-                </Link>
-             </DropdownMenuItem>
-          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>

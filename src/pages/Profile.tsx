@@ -1,4 +1,3 @@
-
 import { useAuth } from '@/hooks/useAuth';
 import Header from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -6,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Badge } from '@/components/ui/badge';
@@ -73,15 +72,6 @@ export default function Profile() {
                         <p className="capitalize font-semibold text-lg">{userData.role}</p>
                    </div>
                    
-                   {userData.role === 'admin' && (
-                     <Button asChild className="w-full">
-                       <Link to="/admin">
-                         <ShieldCheck className="mr-2 h-4 w-4" />
-                         Admin Panel
-                       </Link>
-                     </Button>
-                   )}
-
                    <Button onClick={handleLogout} variant="outline" className="w-full">
                      <LogOut className="mr-2 h-4 w-4" />
                      Logout

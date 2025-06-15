@@ -10,11 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 const models = [
   { id: "TogetherImage/black-forest-labs/FLUX.1-kontext-max", name: "At41rv Ultimate" },
@@ -122,7 +123,15 @@ const ImageGenerator = () => {
 
   return (
     <div className="max-w-4xl mx-auto grid gap-8 lg:grid-cols-2">
-      <div className="space-y-6">
+      <div className="space-y-6 relative">
+        {userData?.role === 'admin' && (
+            <Button asChild variant="ghost" className="absolute top-8 right-8 z-10">
+                <Link to="/admin">
+                    <ShieldCheck className="mr-2 h-4 w-4" />
+                    Admin Panel
+                </Link>
+            </Button>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-card rounded-lg border">
           <div className="space-y-2">
             <label htmlFor="prompt" className="font-semibold text-lg">Your Prompt</label>
