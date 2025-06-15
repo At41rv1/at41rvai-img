@@ -9,7 +9,7 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8 md:py-16">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-black text-foreground pb-2">
-            Flux AI Image Generation
+            At41rv-Img Generation
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mt-2">
             Bring your imagination to life with state-of-the-art AI models.

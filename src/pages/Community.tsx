@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
@@ -10,6 +9,7 @@ interface Image {
   prompt: string;
   imageUrl: string;
   authorEmail: string;
+  authorId: string;
 }
 
 const fetchImages = async (): Promise<Image[]> => {

@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,18 +13,24 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const models = [
-  { id: "TogetherImage/black-forest-labs/FLUX.1-kontext-max", name: "FLUX.1-kontext-max" },
-  { id: "TogetherImage/black-forest-labs/FLUX.1.1-pro", name: "FLUX.1.1-pro" },
+  { id: "TogetherImage/black-forest-labs/FLUX.1-kontext-max", name: "At41rv Ultimate" },
+  { id: "TogetherImage/black-forest-labs/FLUX.1.1-pro", name: "At41rv Pro" },
 ];
 
 const API_URL = "https://samuraiapi.in/v1/images/generations";
 const API_KEY = "896261672367199291725"; // Note: In production, API keys should be handled securely and not exposed on the client-side.
 
 const ImageGenerator = () => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
   const [prompt, setPrompt] = useState("A majestic lion wearing a crown, studio lighting, hyperrealistic");
-  const [model, setModel] = useState(models[0].id);
+  const [model, setModel] = useState(models[1].id);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -31,6 +38,13 @@ const ImageGenerator = () => {
     e.preventDefault();
     if (!prompt) {
       toast.error("Please enter a prompt.");
+      return;
+    }
+
+    if (!user && localStorage.getItem("hasGeneratedOnce")) {
+      toast.error("Please log in to generate more images.", {
+        description: "You get one free generation. Sign in to continue.",
+      });
       return;
     }
 
@@ -59,8 +73,23 @@ const ImageGenerator = () => {
       }
 
       if (data && data.data && data.data.length > 0 && data.data[0].url) {
-        setImageUrl(data.data[0].url);
+        const newImageUrl = data.data[0].url;
+        setImageUrl(newImageUrl);
         toast.success("Image generated successfully!");
+
+        if (user) {
+          await addDoc(collection(db, "images"), {
+            prompt,
+            imageUrl: newImageUrl,
+            authorEmail: user.email,
+            authorId: user.uid,
+            createdAt: serverTimestamp(),
+            modelName: models.find(m => m.id === model)?.name || model,
+          });
+          queryClient.invalidateQueries({ queryKey: ["communityImages"] });
+        } else {
+          localStorage.setItem("hasGeneratedOnce", "true");
+        }
       } else {
         console.error("Unexpected API response structure:", data);
         throw new Error("Could not find image URL in the response.");
