@@ -21,8 +21,8 @@ const models = [
   { id: "TogetherImage/black-forest-labs/FLUX.1.1-pro", name: "At41rv Pro" },
 ];
 
-const API_URL = "https://samuraiapi.in/v1/images/generations";
-const API_KEY = "896261672367199291725"; // Note: In production, API keys should be handled securely and not exposed on the client-side.
+const API_URL = "VITE_API_URL";
+const API_KEY = "VITE_API_AI"; // Note: In production, API keys should be handled securely and not exposed on the client-side.
 
 const ImageGenerator = () => {
   const { user } = useAuth();
