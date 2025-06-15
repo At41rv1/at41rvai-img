@@ -11,7 +11,6 @@ export interface UserData {
   email: string;
   displayName?: string | null;
   photoURL?: string | null;
-  role: 'admin' | 'user';
   subscription: 'basic' | 'ultimate';
   createdAt: any;
 }
@@ -37,10 +36,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         if (userDocSnap.exists()) {
           const existingData = userDocSnap.data() as UserData;
-          // Ensure admin role is correctly set for the admin user
-          if (user.email === 'at41rv@gmail.com' && existingData.role !== 'admin') {
-            await updateDoc(userDocRef, { role: 'admin' });
-            setUserData({ ...existingData, role: 'admin' });
+          // All logged in users get ultimate
+          if (existingData.subscription !== 'ultimate') {
+            await updateDoc(userDocRef, { subscription: 'ultimate' });
+            setUserData({ ...existingData, subscription: 'ultimate' });
           } else {
             setUserData(existingData);
           }
@@ -51,8 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             email: user.email!,
             displayName: user.displayName,
             photoURL: user.photoURL,
-            role: user.email === 'at41rv@gmail.com' ? 'admin' : 'user',
-            subscription: 'basic',
+            subscription: 'ultimate',
             createdAt: serverTimestamp(),
           };
           await setDoc(userDocRef, newUser);

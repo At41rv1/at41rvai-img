@@ -2,7 +2,7 @@ import { useAuth } from '@/hooks/useAuth';
 import Header from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
@@ -66,10 +66,6 @@ export default function Profile() {
                         <Badge variant={userData.subscription === 'ultimate' ? 'default' : 'secondary'} className="capitalize text-lg">
                           {userData.subscription}
                         </Badge>
-                   </div>
-                   <div className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
-                        <h3 className="font-semibold text-muted-foreground">Role</h3>
-                        <p className="capitalize font-semibold text-lg">{userData.role}</p>
                    </div>
                    
                    <Button onClick={handleLogout} variant="outline" className="w-full">

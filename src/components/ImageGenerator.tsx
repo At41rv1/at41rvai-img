@@ -10,12 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Image as ImageIcon, ShieldCheck } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { Link } from "react-router-dom";
 
 const models = [
   { id: "TogetherImage/black-forest-labs/FLUX.1-kontext-max", name: "At41rv Ultimate" },
@@ -26,15 +25,13 @@ const API_URL = "https://samuraiapi.in/v1/images/generations";
 const API_KEY = "896261672367199291725"; // Note: In production, API keys should be handled securely and not exposed on the client-side.
 
 const ImageGenerator = () => {
-  const { user, userData } = useAuth();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const [prompt, setPrompt] = useState("A majestic lion wearing a crown, studio lighting, hyperrealistic");
   const [model, setModel] = useState(models[1].id);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  const isUltimateUser = userData?.subscription === 'ultimate';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,9 +40,9 @@ const ImageGenerator = () => {
       return;
     }
 
-    if (model === models[0].id && !isUltimateUser) {
-        toast.error("You need an Ultimate subscription to use this model.", {
-            description: "Please upgrade your plan to use the At41rv Ultimate model.",
+    if (model === models[0].id && !user) {
+        toast.error("Please log in to use the Ultimate model.", {
+            description: "Only logged-in users can use this model.",
         });
         return;
     }
@@ -112,10 +109,8 @@ const ImageGenerator = () => {
   };
 
   const handleModelChange = (newModel: string) => {
-    if (newModel === models[0].id && !isUltimateUser) {
-        toast.error("You need an Ultimate subscription to use this model.", {
-            description: "Please upgrade your plan to use the At41rv Ultimate model.",
-        });
+    if (newModel === models[0].id && !user) {
+        toast.error("Please log in to use the Ultimate model.");
         return;
     }
     setModel(newModel);
@@ -124,14 +119,6 @@ const ImageGenerator = () => {
   return (
     <div className="max-w-4xl mx-auto grid gap-8 lg:grid-cols-2">
       <div className="space-y-6 relative">
-        {userData?.role === 'admin' && (
-            <Button asChild variant="ghost" className="absolute top-8 right-8 z-10">
-                <Link to="/admin">
-                    <ShieldCheck className="mr-2 h-4 w-4" />
-                    Admin Panel
-                </Link>
-            </Button>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-card rounded-lg border">
           <div className="space-y-2">
             <label htmlFor="prompt" className="font-semibold text-lg">Your Prompt</label>
@@ -159,7 +146,7 @@ const ImageGenerator = () => {
                     value={models[0].id} 
                     className="text-base"
                 >
-                    {models[0].name} {!isUltimateUser && <span className="text-muted-foreground ml-2">(Ultimate Plan)</span>}
+                    {models[0].name} {!user && <span className="text-muted-foreground ml-2">(Login to use)</span>}
                 </SelectItem>
               </SelectContent>
             </Select>

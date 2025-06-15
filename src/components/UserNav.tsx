@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +13,11 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
-import { LogOut, User as UserIcon } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function UserNav() {
-  const { user, userData } = useAuth();
+  const { user } = useAuth();
 
   if (!user) {
     return null;
@@ -56,8 +57,8 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link to="/profile">
-              <UserIcon className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
