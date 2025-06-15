@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  # Explicitly define functions directory (empty means no functions)
+  directory = "netlify/functions"
+
+# Prevent config files from being treated as functions
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
