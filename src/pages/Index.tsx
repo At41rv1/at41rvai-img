@@ -1,12 +1,14 @@
 
 import ImageGenerator from "@/components/ImageGenerator";
+import Header from "@/components/Header";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background font-sans antialiased">
+      <Header />
       <main className="container mx-auto px-4 py-8 md:py-16">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-pink-500 pb-2">
+          <h1 className="text-4xl md:text-6xl font-black text-foreground pb-2">
             Flux AI Image Generation
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mt-2">
