@@ -20,7 +20,7 @@ const Index = () => {
         <Pricing />
       </main>
       <footer className="text-center py-6 text-muted-foreground text-sm">
-        <p>Powered by <a href="https://samuraiapi.in" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Samurai API</a>. Built with Lovable.</p>
+        <p>Powered by <a href="https://www.instagram.com/at41rv" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">At41rv-Img</a>. Built with Lovable.</p>
       </footer>
     </div>
   );
