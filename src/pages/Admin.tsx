@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -34,7 +33,7 @@ export default function Admin() {
       const fetchAllData = async () => {
         // Fetch users
         const usersSnapshot = await getDocs(collection(db, 'users'));
-        setUsers(usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as UserData[]);
+        setUsers(usersSnapshot.docs.map(doc => doc.data()) as UserData[]);
 
         // Fetch images
         const imagesSnapshot = await getDocs(collection(db, 'images'));
@@ -67,8 +66,8 @@ export default function Admin() {
         toast.success(`Successfully upgraded ${emailToUpgrade} to Ultimate!`);
         setEmailToUpgrade('');
         // Refresh user list
-         const usersSnapshot = await getDocs(collection(db, 'users'));
-        setUsers(usersSnapshot.docs.map(d => ({ id: d.id, ...d.data() })) as UserData[]);
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        setUsers(usersSnapshot.docs.map(d => d.data()) as UserData[]);
     } catch (error: any) {
         toast.error("Failed to upgrade user.", { description: error.message });
     } finally {
