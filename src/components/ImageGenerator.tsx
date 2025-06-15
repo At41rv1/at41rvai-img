@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,7 +25,7 @@ const API_URL = "https://samuraiapi.in/v1/images/generations";
 const API_KEY = "896261672367199291725"; // Note: In production, API keys should be handled securely and not exposed on the client-side.
 
 const ImageGenerator = () => {
-  const { user } = useAuth();
+  const { user, userData } = useAuth();
   const queryClient = useQueryClient();
 
   const [prompt, setPrompt] = useState("A majestic lion wearing a crown, studio lighting, hyperrealistic");
@@ -34,11 +33,20 @@ const ImageGenerator = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
+  const isUltimateUser = userData?.subscription === 'ultimate';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt) {
       toast.error("Please enter a prompt.");
       return;
+    }
+
+    if (model === models[0].id && !isUltimateUser) {
+        toast.error("You need an Ultimate subscription to use this model.", {
+            description: "Please upgrade your plan to use the At41rv Ultimate model.",
+        });
+        return;
     }
 
     if (!user && localStorage.getItem("hasGeneratedOnce")) {
@@ -102,6 +110,16 @@ const ImageGenerator = () => {
     }
   };
 
+  const handleModelChange = (newModel: string) => {
+    if (newModel === models[0].id && !isUltimateUser) {
+        toast.error("You need an Ultimate subscription to use this model.", {
+            description: "Please upgrade your plan to use the At41rv Ultimate model.",
+        });
+        return;
+    }
+    setModel(newModel);
+  }
+
   return (
     <div className="max-w-4xl mx-auto grid gap-8 lg:grid-cols-2">
       <div className="space-y-6">
@@ -119,16 +137,21 @@ const ImageGenerator = () => {
 
           <div className="space-y-2">
             <label htmlFor="model" className="font-semibold text-lg">Choose a Model</label>
-            <Select value={model} onValueChange={setModel}>
+            <Select value={model} onValueChange={handleModelChange}>
               <SelectTrigger id="model" className="w-full text-base h-11">
                 <SelectValue placeholder="Select a model" />
               </SelectTrigger>
               <SelectContent>
-                {models.map((m) => (
-                  <SelectItem key={m.id} value={m.id} className="text-base">
-                    {m.name}
-                  </SelectItem>
-                ))}
+                <SelectItem key={models[1].id} value={models[1].id} className="text-base">
+                  {models[1].name}
+                </SelectItem>
+                <SelectItem 
+                    key={models[0].id} 
+                    value={models[0].id} 
+                    className="text-base"
+                >
+                    {models[0].name} {!isUltimateUser && <span className="text-muted-foreground ml-2">(Ultimate Plan)</span>}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>

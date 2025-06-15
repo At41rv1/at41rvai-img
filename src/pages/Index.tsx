@@ -1,6 +1,7 @@
 
 import ImageGenerator from "@/components/ImageGenerator";
 import Header from "@/components/Header";
+import Pricing from "@/components/Pricing";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
           </p>
         </div>
         <ImageGenerator />
+        <Pricing />
       </main>
       <footer className="text-center py-6 text-muted-foreground text-sm">
         <p>Powered by <a href="https://samuraiapi.in" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Samurai API</a>. Built with Lovable.</p>
