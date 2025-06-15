@@ -2,7 +2,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import app, { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 
 const auth = getAuth(app);
 
@@ -36,7 +36,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userDocSnap = await getDoc(userDocRef);
         
         if (userDocSnap.exists()) {
-          setUserData(userDocSnap.data() as UserData);
+          const existingData = userDocSnap.data() as UserData;
+          // Ensure admin role is correctly set for the admin user
+          if (user.email === 'at41rv@gmail.com' && existingData.role !== 'admin') {
+            await updateDoc(userDocRef, { role: 'admin' });
+            setUserData({ ...existingData, role: 'admin' });
+          } else {
+            setUserData(existingData);
+          }
         } else {
           // Create new user document in Firestore
           const newUser: UserData = {
