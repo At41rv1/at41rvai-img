@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +29,8 @@ export function UserNav() {
 
   const getInitials = (email: string | null) => {
     if (!email) return "U";
+    const name = user?.displayName;
+    if (name) return name.substring(0, 2).toUpperCase();
     return email.substring(0, 2).toUpperCase();
   };
 
@@ -52,9 +55,11 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <UserIcon className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+          <DropdownMenuItem asChild>
+            <Link to="/profile">
+              <UserIcon className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </Link>
           </DropdownMenuItem>
           {userData?.role === 'admin' && (
              <DropdownMenuItem asChild>

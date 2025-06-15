@@ -9,6 +9,8 @@ const auth = getAuth(app);
 export interface UserData {
   uid: string;
   email: string;
+  displayName?: string | null;
+  photoURL?: string | null;
   role: 'admin' | 'user';
   subscription: 'basic' | 'ultimate';
   createdAt: any;
@@ -40,6 +42,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const newUser: UserData = {
             uid: user.uid,
             email: user.email!,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
             role: user.email === 'at41rv@gmail.com' ? 'admin' : 'user',
             subscription: 'basic',
             createdAt: serverTimestamp(),

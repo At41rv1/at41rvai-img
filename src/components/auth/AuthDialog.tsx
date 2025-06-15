@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import {
@@ -33,21 +32,7 @@ const loginSchema = z.object({
 const handleGoogleSignIn = async (onOpenChange: (open: boolean) => void) => {
     const provider = new GoogleAuthProvider();
     try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-
-        if (!userDoc.exists()) {
-            await setDoc(userDocRef, {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoURL,
-                createdAt: serverTimestamp(),
-            });
-        }
+        await signInWithPopup(auth, provider);
         toast.success("Successfully signed in with Google!");
         onOpenChange(false);
     } catch (error: any) {
@@ -63,13 +48,7 @@ function SignUpForm({ onOpenChange }: { onOpenChange: (open: boolean) => void })
 
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-      const user = userCredential.user;
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        email: user.email,
-        createdAt: serverTimestamp(),
-      });
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
       toast.success("Account created successfully!");
       onOpenChange(false);
     } catch (error: any) {
