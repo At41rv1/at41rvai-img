@@ -17,8 +17,8 @@ import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const models = [
-  { id: "TogetherImage/black-forest-labs/FLUX.1-kontext-max", name: "At41rv Ultimate" },
-  { id: "TogetherImage/black-forest-labs/FLUX.1.1-pro", name: "At41rv Pro" },
+  { id: "black-forest-labs/FLUX.1-kontext-max", name: "At41rv Ultimate" },
+  { id: "black-forest-labs/FLUX.1-kontext-pro", name: "At41rv Pro" },
 ];
 
 const API_URL = import.meta.env.VITE_API_URL;
