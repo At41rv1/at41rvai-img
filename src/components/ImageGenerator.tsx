@@ -17,12 +17,12 @@ import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const models = [
-  { id: "black-forest-labs/FLUX.1-kontext-max", name: "At41rv Ultimate" },
   { id: "black-forest-labs/FLUX.1-kontext-pro", name: "At41rv Pro" },
+  { id: "black-forest-labs/FLUX.1-kontext-max", name: "At41rv Ultimate" },
 ];
 
 const API_URL = import.meta.env.VITE_API_URL;
-const API_KEY = import.meta.env.VITE_API_AI;
+const API_KEY = "sk-KdsJAWmaRCpjEzrvJ3znWQIfya5QIYvhKtLVWIaTtRNgve8D";
 
 const ImageGenerator = () => {
   const { user } = useAuth();
