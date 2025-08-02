@@ -22,7 +22,7 @@ const models = [
 ];
 
 const API_URL = import.meta.env.VITE_API_URL;
-const API_KEY = "sk-KdsJAWmaRCpjEzrvJ3znWQIfya5QIYvhKtLVWIaTtRNgve8D";
+const API_KEY = "sk-ljdmgfIY4EPOkORN9OtRzKQR1F0UpoN5s0h8q51UkZgcSe9D";
 
 const ImageGenerator = () => {
   const { user } = useAuth();
